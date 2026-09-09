@@ -1,0 +1,320 @@
+@import '@fontsource/archivo/400.css';
+@import '@fontsource/archivo/500.css';
+@import '@fontsource/archivo/600.css';
+@import '@fontsource/archivo-narrow/400.css';
+@import '@fontsource/archivo-narrow/500.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --surface-deep: #0d1418;
+  --surface-raised: #16212a;
+  --surface-inset: #0a1013;
+  --line: #243440;
+  --text-primary: #dce6ec;
+  --text-muted: #7a8f9c;
+  --agent: #4fd1c5;
+  --human: #dce6ec;
+  --advisory: #e0a93b;
+  --alarm: #e5484d;
+  --nominal: #3d8f6b;
+
+  --status-h: 48px;
+  --command-h: 52px;
+  --nav-w: 64px;
+  --nav-w-open: 220px;
+  --rail-w: 340px;
+  --timeline-h: 56px;
+
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--surface-deep);
+  color: var(--text-primary);
+  font-family: 'Archivo', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--line);
+}
+
+::selection {
+  background: rgba(79, 209, 197, 0.25);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--agent);
+  outline-offset: 1px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2f4452;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+.narrow {
+  font-family: 'Archivo Narrow', Archivo, sans-serif;
+}
+
+/* CCTV treatment */
+.cctv {
+  filter: contrast(1.15) saturate(0.6) brightness(0.85);
+}
+.cctv-robot {
+  filter: contrast(1.25) saturate(0.35) brightness(0.9) hue-rotate(160deg);
+}
+.cctv-thermal {
+  filter: contrast(1.4) saturate(0) brightness(1.1) invert(0.08);
+}
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* Alert arrival edge flash */
+@keyframes edge-flash {
+  0% {
+    box-shadow: inset 4px 0 0 var(--flash, var(--advisory)), 0 0 0 0 transparent;
+    background: rgba(224, 169, 59, 0.16);
+  }
+  100% {
+    box-shadow: inset 3px 0 0 var(--stripe, var(--line));
+    background: transparent;
+  }
+}
+.alert-new {
+  animation: edge-flash 900ms ease-out 1;
+}
+
+@keyframes pulse-beam {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+.caret::after {
+  content: '▍';
+  color: var(--agent);
+  animation: blink 1s step-end infinite;
+}
+
+.posture-elevated {
+  box-shadow: inset 0 0 0 2px rgba(224, 169, 59, 0.55);
+}
+.posture-alarm {
+  box-shadow: inset 0 0 0 2px rgba(229, 72, 77, 0.65);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-new {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.panel {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.inset {
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.hairline {
+  border-color: var(--line);
+}
+.label {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-muted);
+}
+.agent-text {
+  color: var(--agent);
+}
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.seg > button {
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+.seg > button:last-child {
+  border-right: 0;
+}
+.seg > button[aria-pressed='true'] {
+  background: rgba(79, 209, 197, 0.12);
+  color: var(--text-primary);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface-raised);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: #1c2a34;
+}
+.btn-primary {
+  background: rgba(79, 209, 197, 0.14);
+  border-color: rgba(79, 209, 197, 0.5);
+  color: var(--text-primary);
+}
+.btn-primary:hover {
+  background: rgba(79, 209, 197, 0.22);
+}
+.btn-danger {
+  border-color: rgba(229, 72, 77, 0.5);
+}
+.btn-sm {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  font-size: 11px;
+  line-height: 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.chip[aria-pressed='true'] {
+  border-color: rgba(79, 209, 197, 0.5);
+  color: var(--text-primary);
+  background: rgba(79, 209, 197, 0.1);
+}
+.dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+input.field,
+textarea.field,
+select.field {
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 13px;
+  width: 100%;
+}
+input.field::placeholder {
+  color: var(--text-muted);
+}
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+table.data th {
+  text-align: left;
+  font-family: 'Archivo Narrow', Archivo, sans-serif;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+table.data td {
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(36, 52, 64, 0.5);
+  vertical-align: top;
+}
+table.data tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+.kbd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0 4px;
+  color: var(--text-muted);
+}

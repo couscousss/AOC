@@ -1,0 +1,14 @@
+import { chromium } from 'playwright-core';
+import { spawn } from 'node:child_process';
+import { setTimeout as sleep } from 'node:timers/promises';
+const PORT = 4300 + Math.floor(Math.random() * 100);
+const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], { cwd: '/home/user/AOC', stdio: 'pipe' });
+await sleep(2500);
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox', '--ignore-gpu-blocklist'] });
+const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
+page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') console.log(m.type().toUpperCase(), m.text().slice(0, 600)); });
+page.on('pageerror', (e) => console.log('PAGEERROR', String(e.stack ?? e).slice(0, 1200)));
+await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
+await sleep(4000);
+console.log('root html length', (await page.innerHTML('#root')).length);
+await browser.close(); server.kill(); process.exit(0);
