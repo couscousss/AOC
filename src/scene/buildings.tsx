@@ -14,12 +14,12 @@ function bakedBox(w: number, h: number, d: number, hex: string) {
   for (let i = 0; i < n.count; i++) {
     const ny = n.getY(i), nx = n.getX(i), nz = n.getZ(i);
     let f = 0.55;
-    if (ny > 0.5) f = 1.0;
-    else if (ny < -0.5) f = 0.2;
-    else if (nz > 0.5) f = 0.78; // south face, faces the camera
-    else if (nx > 0.5) f = 0.62;
-    else if (nx < -0.5) f = 0.5;
-    else f = 0.42;
+    if (ny > 0.5) f = 1.55; // roof, lit by the cold sky
+    else if (ny < -0.5) f = 0.3;
+    else if (nz > 0.5) f = 1.15; // south face, faces the camera
+    else if (nx > 0.5) f = 0.95;
+    else if (nx < -0.5) f = 0.8;
+    else f = 0.7;
     c.copy(base).multiplyScalar(f);
     colors[i * 3] = c.r; colors[i * 3 + 1] = c.g; colors[i * 3 + 2] = c.b;
   }
@@ -40,9 +40,9 @@ function BuildingMesh({ b, dimmed }: { b: Building; dimmed: boolean }) {
     <group position={[b.position[0], y, b.position[2]]} rotation={[0, b.rotation ?? 0, 0]}>
       <mesh geometry={geom}>
         {b.shape === 'cylinder' ? (
-          <meshLambertMaterial color={b.color} transparent opacity={opacity} />
+          <meshBasicMaterial color={new THREE.Color(b.color).multiplyScalar(1.15)} transparent opacity={opacity} />
         ) : (
-          <meshLambertMaterial vertexColors transparent opacity={opacity} />
+          <meshBasicMaterial vertexColors transparent opacity={opacity} />
         )}
       </mesh>
       <lineSegments geometry={edges}>
@@ -74,11 +74,11 @@ export function Ground() {
     const c = document.createElement('canvas');
     c.width = 512; c.height = 384;
     const x = c.getContext('2d')!;
-    x.fillStyle = '#16232b';
+    x.fillStyle = '#1b2a33';
     x.fillRect(0, 0, c.width, c.height);
     const rng = makeRng(3);
     for (let i = 0; i < 9000; i++) {
-      const v = 16 + Math.floor(rng.next() * 22);
+      const v = 20 + Math.floor(rng.next() * 26);
       x.fillStyle = `rgba(${v + 4},${v + 12},${v + 16},${0.35 + rng.next() * 0.4})`;
       x.fillRect(rng.next() * c.width, rng.next() * c.height, 1 + rng.next() * 3, 1 + rng.next() * 3);
     }
@@ -99,7 +99,7 @@ export function Ground() {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[GROUND.w + 400, GROUND.d + 400]} />
-        <meshLambertMaterial map={tex} color="#b8c4cc" />
+        <meshLambertMaterial map={tex} color="#d0dae0" />
       </mesh>
     </group>
   );
@@ -142,7 +142,7 @@ export function Roads() {
         return (
           <mesh key={i} position={[(r.from[0] + r.to[0]) / 2, 0.05, (r.from[1] + r.to[1]) / 2]} rotation={[-Math.PI / 2, 0, -rot]}>
             <planeGeometry args={[r.width, len + r.width]} />
-            <meshLambertMaterial color="#1a262e" />
+            <meshLambertMaterial color="#26343d" />
           </mesh>
         );
       })}
@@ -169,7 +169,7 @@ export function Helipad() {
     <group position={HELIPAD.position}>
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[HELIPAD.radius + 2, 32]} />
-        <meshLambertMaterial color="#1c2830" />
+        <meshLambertMaterial color="#2a3841" />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
         <planeGeometry args={[HELIPAD.radius * 2, HELIPAD.radius * 2]} />

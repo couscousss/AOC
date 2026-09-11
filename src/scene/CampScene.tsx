@@ -25,14 +25,13 @@ export function CampScene() {
       onCreated={({ gl, scene }) => {
         gl.setClearColor(FOG);
         scene.fog = new THREE.FogExp2(FOG.getHex(), 0.0021);
-        gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 1.25;
+        gl.toneMapping = THREE.NoToneMapping;
       }}
       shadows={false}
     >
       {/* cold ambient from above, pre-dawn */}
-      <hemisphereLight args={['#3a5f74', '#0a1014', 1.35]} />
-      <directionalLight position={[-120, 200, -80]} intensity={0.55} color="#8fb3c9" />
+      <hemisphereLight args={['#4a728a', '#0a1014', 1.8]} />
+      <directionalLight position={[-120, 200, -80]} intensity={0.7} color="#8fb3c9" />
       <StreetLights />
 
       <Ground />
