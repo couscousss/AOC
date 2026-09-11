@@ -238,7 +238,7 @@ function SensorRow({ r, ticket, onRaise }: { r: Row; ticket?: string; onRaise: (
         <td className="text-right whitespace-nowrap">
           {attention && (
             ticket ? (
-              <span className="text-11 text-text-muted">{ticket in EXISTING_TICKETS_BY_ID ? `${ticket} open` : 'Ticket raised'} <span className="mono">{ticket}</span></span>
+              <span className="text-11 text-text-muted">{ticket in EXISTING_TICKETS_BY_ID ? 'Open' : 'Ticket raised'} <span className="mono">{ticket}</span></span>
             ) : (
               <button type="button" className="btn btn-sm" onClick={onRaise}>Raise ticket</button>
             )
