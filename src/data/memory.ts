@@ -1,5 +1,5 @@
 import type { AgentId, MemoryEntry } from '@/lib/types';
-import { ago, hr } from '@/lib/time';
+import { ago, hr, min } from '@/lib/time';
 
 const d = (days: number) => ago(hr(24 * days));
 
@@ -17,7 +17,7 @@ export const MEMORY: Record<AgentId, MemoryEntry[]> = {
     { id: 'M-F-05', subject: 'NE fence corner', fact: 'No routine activity of any kind at this location between 2200 and 0600 in the last 90 days. Anything seen here at night is anomalous by definition.', learnedAt: d(90), confidence: 0.99 },
   ],
   trace: [
-    { id: 'M-T-01', subject: 'Personnel roster', fact: '412 assigned personnel, 288 on camp tonight per the 2200 muster. 9 contractors pre-registered for tomorrow, none for tonight.', learnedAt: hr(-6), confidence: 1 },
+    { id: 'M-T-01', subject: 'Personnel roster', fact: '412 assigned personnel, 288 on camp tonight per the 2200 muster. 9 contractors pre-registered for tomorrow, none for tonight.', learnedAt: ago(hr(6)), confidence: 1 },
     { id: 'M-T-02', subject: 'Re-identification', fact: 'Cross-camera re-ID is reliable between CAM-G1-01, CAM-G1-02 and CAM-HQ-01 (shared lighting). It is unreliable between exterior thermal and interior colour cameras; I say so when it matters.', learnedAt: d(15), confidence: 0.9 },
     { id: 'M-T-03', subject: 'East access road', fact: 'Civilian traffic on the east access road stops almost completely after 2300. A vehicle there after midnight has been camp-related in 11 of 12 cases; the twelfth was INC-0318.', learnedAt: d(8), confidence: 0.92 },
   ],
@@ -37,12 +37,12 @@ export const MEMORY: Record<AgentId, MemoryEntry[]> = {
   ],
   fitter: [
     { id: 'M-M-01', subject: 'Quadruped Mk3 batteries', fact: 'Capacity drops below 80% around cycle 320. Kestrel-2 is at 208, Badger-1 at 251. Badger-1 will need a pack in roughly 5 weeks at current usage.', learnedAt: d(3), confidence: 0.89 },
-    { id: 'M-M-02', subject: 'CAM-P-W1', fact: 'Offline since 2140. Power at the pole is present; the failure is the media converter. Ticket FM-1187 raised, spares in the workshop. Coverage gap is 40m either side, partly covered by THM-P-SW.', learnedAt: hr(-6.5), confidence: 0.95 },
+    { id: 'M-M-02', subject: 'CAM-P-W1', fact: 'Offline since 2140. Power at the pole is present; the failure is the media converter. Ticket FM-1187 raised, spares in the workshop. Coverage gap is 40m either side, partly covered by THM-P-SW.', learnedAt: ago(hr(6.5)), confidence: 0.95 },
     { id: 'M-M-03', subject: 'Generator 1', fact: 'Burns 3.1 L/h under night load. Reserve threshold is 400 L. At the current fill rate the reserve is reached in 6 days.', learnedAt: d(1), confidence: 0.92 },
   ],
   overwatch: [
     { id: 'M-O-01', subject: 'Sift and Trace disagreement', fact: 'When Sift dismisses and Trace escalates within 30s of each other on the same track, the human is shown both and the track is held open. Happened 4 times in 90 days; 3 were Trace correct.', learnedAt: d(40), confidence: 0.9 },
-    { id: 'M-O-02', subject: 'Credential ID-2261', fact: 'Contractor badge (Halden & Co, J. Marsh). Badge tapped the HQ north door at 04:06 tonight and was refused. The same account authenticated to the contractor portal from an off-camp address at 03:58. Neither event alone met the alert threshold.', learnedAt: hr(-0.18), confidence: 0.84 },
+    { id: 'M-O-02', subject: 'Credential ID-2261', fact: 'Contractor badge (Halden & Co, J. Marsh). Badge tapped the HQ north door at 04:06 tonight and was refused. The same account authenticated to the contractor portal from an off-camp address at 03:58. Neither event alone met the alert threshold.', learnedAt: ago(min(11)), confidence: 0.84 },
     { id: 'M-O-03', subject: 'Autonomy policy', fact: 'No agent may be set to Autonomous for any action that dispatches a physical asset without the change being recorded with a named approver. Enforced in the audit log, not just the UI.', learnedAt: d(100), confidence: 1 },
   ],
 };
